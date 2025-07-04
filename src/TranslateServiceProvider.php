@@ -2,10 +2,16 @@
 
 namespace Ravenna\Translate;
 
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Ravenna\Translate\View\Components\RtScripts;
 
 class TranslateServiceProvider extends ServiceProvider
 {
+    const ROOT_DIR = __DIR__ . '/../';
+    const ASSET_DIR = self::ROOT_DIR . 'public/build/assets/';
+    const PUBLIC_DIR = 'ravenna/translate/';
+
     public function register()
     {
         $this->mergeConfigFrom(
@@ -20,10 +26,13 @@ class TranslateServiceProvider extends ServiceProvider
 
     public function boot()
     {
+        require_once __DIR__ . '/functions.php';
+
         $this->rTPublishes();
+        $this->rtBladeComponents();
     }
 
-    protected function rTPublishes()
+    protected function rtPublishes()
     {
         $this->publishes([
             __DIR__ . '/../config/ravenna-translate.php' => config_path('ravenna-translate.php'),
@@ -32,5 +41,19 @@ class TranslateServiceProvider extends ServiceProvider
         $this->publishesMigrations([
             __DIR__ . '/../database/migrations' => database_path('migrations'),
         ], 'rt-migrations');
+
+        $this->rtPublishesVue();
+    }
+
+    protected function rtPublishesVue()
+    {
+        $this->publishes([
+            __DIR__ . '/../public/build/assets' => public_path('ravenna/translate'),
+        ], 'rt-vue');
+    }
+
+    protected function rtBladeComponents()
+    {
+        Blade::component('rt-scripts', RtScripts::class);
     }
 }
