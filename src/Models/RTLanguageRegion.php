@@ -7,10 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class RTLanguageRegion extends Model
 {
-    /** @use HasFactory<\Database\Factories\RTLanguageRegionFactory> */
     use HasFactory;
 
+    protected $table = 'r_t_language_regions';
+
+    public $incrementing = false;
+
     protected $fillable = [
-        'id',
+        'language_region',
     ];
 }

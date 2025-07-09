@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('r_t_language_regions', function (Blueprint $table) {
-            $table->string('id', 10)->primary();
+            $table->id();
+            $table->string('language_region', 10);
             $table->timestamps();
         });
     }

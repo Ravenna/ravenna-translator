@@ -1,15 +1,10 @@
-import Rt from "./components/vue/rt.vue";
+import * as RTTranslate from './vue/directive.vue.js';
 
-console.log('Ravenna Translate loading');
-
-document.addEventListener('DOMContentLoaded', function () {
-    console.log(app);
-    if (typeof app !== 'undefined' && typeof app.__vue_app__ !== 'undefined') {
-        console.log('Ravenna Translate Vue detected');
-        app.__vue_app__.component('ravenna-translate', Rt);
-    } else {
-        console.error('Ravenna Translate Vue not detected. Please ensure Vue is loaded before this script.');
-    } 
+document.addEventListener('DOMContentLoaded', () => {
+    if(app) {
+        console.log(app);
+        app.__vue_app__.directive('translate', RTTranslate.default);
+    }
 });
 
-console.log('Ravenna Translate loaded');
+console.log('RTTranslate directive loaded');

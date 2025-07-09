@@ -38,9 +38,9 @@ class TranslateServiceProvider extends ServiceProvider
             __DIR__ . '/../config/ravenna-translate.php' => config_path('ravenna-translate.php'),
         ], 'rt-config');
 
-        $this->publishesMigrations([
-            __DIR__ . '/../database/migrations' => database_path('migrations'),
-        ], 'rt-migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+
+        $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
 
         $this->rtPublishesVue();
     }
@@ -49,6 +49,10 @@ class TranslateServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__ . '/../public/build/assets' => public_path('ravenna/translate'),
+        ], 'rt-vue');
+
+        $this->publishes([
+            __DIR__ . '/../resources/js/vue' => resource_path('js/vendor/ravenna/translate'),
         ], 'rt-vue');
     }
 
