@@ -11,6 +11,10 @@
             "email": "james@ravennainteractive.com"
         },
         {
+            "name": "Melody Menzies",
+            "email": "melody@ravennainteractive.com"
+        },
+        {
             "name": "Dominic Sears",
             "email": "dominicsears.work@gmail.com"
         }
@@ -43,6 +47,5 @@
         "allow-plugins": {
             "pestphp/pest-plugin": true
         }
-    },
-    "version": "1.0.0"
+    }
 }
