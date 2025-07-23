@@ -41,19 +41,6 @@ class TranslateServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
         $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
-
-        $this->rtPublishesVue();
-    }
-
-    protected function rtPublishesVue()
-    {
-        $this->publishes([
-            __DIR__ . '/../public/build/assets' => public_path('ravenna/translate'),
-        ], 'rt-vue');
-
-        $this->publishes([
-            __DIR__ . '/../resources/js/vue' => resource_path('js/vendor/ravenna/translate'),
-        ], 'rt-vue');
     }
 
     protected function rtBladeComponents()

@@ -12,7 +12,6 @@ class Translate
 {
     const CACHE_PREFIX = 'ravenna_translate_';
     const CACHE_TTL = 30; // days
-    const EXTERNAL_SERVICE_URL = 'http://translate-sass-2.test/api';
 
     protected $locale;
     protected $dbLocale;
@@ -138,7 +137,9 @@ class Translate
 
     protected function fetchTranslationFromExternalService(array $texts): ?array
     {
-        $response = Http::post(self::EXTERNAL_SERVICE_URL . '/translate', [
+        $externalServiceUrl = config('ravenna-translate.translation-external-api.url');
+
+        $response = Http::post($externalServiceUrl . '/translate', [
             'lang' => $this->locale,
             'texts' => $texts,
         ]);
