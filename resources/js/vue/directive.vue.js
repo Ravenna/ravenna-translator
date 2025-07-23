@@ -98,4 +98,4 @@ const translate = {
     }
 };
 
-export default translate;
+export { translate };

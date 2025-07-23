@@ -4,11 +4,21 @@ import vuePlugin from '@vitejs/plugin-vue';
 
 export default defineConfig({
   plugins: [
-    laravel({
-      hotFile: 'public/translate.hot', // Most important lines
-      input: ['resources/js/app.js'],
-      refresh: true,
-    }),
     vuePlugin(),
   ],
+  build: {
+    lib: {
+      entry: 'resources/js/vue/app.js',
+      name: 'RavennaTranslateVue',
+      fileName: 'ravenna-translate-vue',
+    },
+    rollupOptions: {
+      external: ['vue'],
+      output: {
+        globals: {
+          vue: 'Vue',
+        },
+      }
+    }
+  }
 });

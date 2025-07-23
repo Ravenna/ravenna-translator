@@ -1,0 +1,1 @@
+export { translate as RTTranslate } from './directive.vue.js';
