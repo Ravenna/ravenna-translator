@@ -40,7 +40,7 @@ class Translate
 
         $this->dbLocale = RTLanguageRegion::where('language_region', $this->locale)->first();
 
-        if (!$this->dbLocale) {
+        if (! $this->dbLocale) {
             $this->dbLocale = RTLanguageRegion::create(['language_region' => $this->locale]);
         }
     }
@@ -138,8 +138,9 @@ class Translate
     protected function fetchTranslationFromExternalService(array $texts): ?array
     {
         $externalServiceUrl = config('ravenna-translate.translation-external-api.url');
+        $externalServiceEndpoint = config('ravenna-translate.translation-external-api.endpoint', '/api');
 
-        $response = Http::post($externalServiceUrl . '/translate', [
+        $response = Http::post($externalServiceUrl . $externalServiceEndpoint . '/translate', [
             'lang' => $this->locale,
             'texts' => $texts,
         ]);
@@ -147,13 +148,11 @@ class Translate
         if ($response->successful()) {
             return $response->json('translated_texts', []);
         } else {
-            /*
             Log::error('External translation service error', [
                 'locale' => $this->locale,
                 'texts' => $texts,
                 'response' => $response->body(),
             ]);
-            */
         }
 
         return [];

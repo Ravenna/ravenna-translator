@@ -11,8 +11,6 @@ class RTLanguageRegion extends Model
 
     protected $table = 'r_t_language_regions';
 
-    public $incrementing = false;
-
     protected $fillable = [
         'language_region',
     ];

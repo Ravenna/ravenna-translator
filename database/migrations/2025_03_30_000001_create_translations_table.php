@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('key', 255)->index();
             $table->text('value');
             $table->timestamps();
+            $table->unique(['language_region_id', 'key'], 'r_t_translations_unique_key');
         });
     }
 
