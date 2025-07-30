@@ -4,8 +4,14 @@ import { md5 } from 'js-md5';
 const STORAGE_KEY = 'rt-translations';
 const API_URL = '/translations-api/v1';
 
+const verifyText = (text) => {
+    // regex to verify text content contains text and is not newline/punctuation only
+    const regex = /[^\s.,!?;:()]+/;
+    return regex.test(text);    
+}
+
 function getLanguage() {
-    return navigator.language || 'en';
+    return navigator.language || 'en-US';
 }
 
 function getStoredTranslations() {
@@ -14,6 +20,8 @@ function getStoredTranslations() {
 
 function storeTranslation(key, lang, value) {
     const translations = getStoredTranslations();
+
+    console.log("Store translation", { key, lang, value });
 
     if (!translations[key]) {
         translations[key] = {};
@@ -29,56 +37,104 @@ function getTranslationFromStorage(key, lang) {
     return translations[key]?.[lang] || null;
 }
 
-async function fetchTranslation(text, lang) {
-    console.log(`Fetching translation for "${text}" in language "${lang}"`);
-    try {
-        const { data } = await axios.post(API_URL, {
-            lang,
-            texts: [text]
-        });
+async function fetchTranslation(texts = [], lang) {
+    const { data } = await axios.post(API_URL, {
+        lang,
+        texts: texts
+    });
 
-        console.log("Fetch translation data", data);
+    console.log("Fetch translation data", data);
 
-        const translated = data.translations || text;
-        console.log(`Translation for "${text}" in "${lang}":`, translated[0]);
-        storeTranslation(text, lang, translated[0].value);
-        return translated[0].value;
-    } catch (err) {
-        console.error(`Error fetching translation for "${text}"`, err);
-        return text;
-    }
+    const translated = data.translations;
+
+    return translated;
 }
 
-function applyTranslation(el, text, isChildren = false) {
-    if (isChildren) {
-        el.querySelectorAll('*').forEach(child => {
-            if (child.childNodes.length === 1 && child.childNodes[0].nodeType === 3) {
-                child.textContent = text;
-            }
-        });
+function applyTranslation(parent, index, text) {
+    // query selector dataset contains the key
+    const child = parent.childNodes[index];
+    if (child) {
+        child.textContent = text;
     } else {
+        // if no parent found, apply directly to the element
         el.textContent = text;
+    }
+
+    // remove the animation after applying translation
+    removeAnimation(parent);
+}
+
+function walkElement(el, index, texts) {
+    if (el.nodeType === Node.TEXT_NODE && el.textContent.trim() && verifyText(el.textContent)) {
+        const text = el.textContent.trim();
+        const locale = getLanguage();
+        const key = md5(locale + text);
+        const parent = el.parentNode;
+        parent.dataset.translateKey = key;
+        // simple pulse animation for visual feedback using opacity
+        addPulseAnimation(parent);
+        texts.push({ text, key, parent, index });
+    } else if (el.nodeType === Node.ELEMENT_NODE) {
+        el.childNodes.forEach((child, index) => walkElement(child, index, texts));
     }
 }
 
 async function updateElement(el, isChildren = false) {
     const lang = getLanguage();
-    const key = md5(el.textContent.trim());
-    let translated = getTranslationFromStorage(key, lang);
+    const texts = [];
+    walkElement(el, 0, texts);
 
-    if (!translated) {
-        translated = await fetchTranslation(el.textContent, lang);
+    const toTranslate = texts.filter(item => {
+        const storedValue = getTranslationFromStorage(item.key, lang);
+
+        if (storedValue) {
+            applyTranslation(item.parent, item.index, storedValue);
+            return false; // already translated
+        }
+
+        return true;
+    });
+
+    if (toTranslate.length === 0) {
+        return;
     }
 
-    applyTranslation(el, translated, isChildren);
-    storeTranslation(key, lang, translated);
+    try {
+        const translated = await fetchTranslation(toTranslate.map(item => item.text), lang);
+
+        translated.forEach(item => {
+            const oldText = toTranslate.find(t => t.key === item.key);
+            applyTranslation(oldText.parent, oldText.index, item.value);
+            storeTranslation(item.key, lang, item.value);
+        });
+    } catch (error) {
+        // remove any ongoing animations
+        texts.forEach(item => {
+            removeAnimation(item.parent);
+        });
+        console.error('Translation error:', error);
+    }
+}
+
+function removeAnimation(el) {
+    el.getAnimations().forEach(animation => {
+        animation.cancel();
+    });
+}
+
+function addPulseAnimation(el) {
+    el.animate([
+        { opacity: 1 },
+        { opacity: 0.5 },
+        { opacity: 1 }
+    ], {
+        duration: 1500,
+        iterations: Infinity
+    });
 }
 
 const translate = {
     mounted(el, binding) {
-        // clear local storage for testing purposes
-        localStorage.removeItem(STORAGE_KEY);
-
         const isChildren = binding.modifiers.children;
         const isGlobal = binding.modifiers.global;
 
