@@ -9,8 +9,8 @@ use Ravenna\Translate\View\Components\RtScripts;
 class TranslateServiceProvider extends ServiceProvider
 {
     const ROOT_DIR = __DIR__ . '/../';
-    const ASSET_DIR = self::ROOT_DIR . 'public/build/assets/';
-    const PUBLIC_DIR = 'ravenna/translate/';
+    const ASSET_DIR = self::ROOT_DIR . 'public/ravenna/translate';
+    const PUBLIC_DIR = 'ravenna/translate';
 
     public function register()
     {
@@ -35,8 +35,12 @@ class TranslateServiceProvider extends ServiceProvider
     protected function rtPublishes()
     {
         $this->publishes([
-            __DIR__ . '/../config/ravenna-translate.php' => config_path('ravenna-translate.php'),
-        ], 'rt-config');
+            self::ASSET_DIR => public_path(self::PUBLIC_DIR),
+        ], 'public');
+
+        $this->publishes([
+            __DIR__ . '/../public/ravenna/translate' => public_path('ravenna/translate'),
+        ], 'rt-assets');
 
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
@@ -45,6 +49,7 @@ class TranslateServiceProvider extends ServiceProvider
 
     protected function rtBladeComponents()
     {
-        Blade::component('rt-scripts', RtScripts::class);
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'translate');
+        Blade::componentNamespace('Ravenna\\Translate\\View\\Components', 'translate');
     }
 }
