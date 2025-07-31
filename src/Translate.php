@@ -127,12 +127,12 @@ class Translate
 
     public static function generateDbKey(string $locale, string $text): string
     {
-        return md5($locale . $text);
+        return rt_text_key($locale, $text);
     }
 
     protected function wrapText(string $text): string
     {
-        return '<span data-translate="1" data-translate-key="' . self::generateDbKey($this->locale, $text) . '">' . $text . '</span>';
+        return rt_wrap_text($text);
     }
 
     protected function fetchTranslationFromExternalService(array $texts): ?array

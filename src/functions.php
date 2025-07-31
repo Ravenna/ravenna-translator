@@ -13,3 +13,17 @@ if (!function_exists('rt')) {
         return ravenna_translate($text);
     }
 }
+
+if (!function_exists('rt_text_key')) {
+    function rt_text_key(string $locale, string $text)
+    {
+        return md5($locale . $text);
+    }
+}
+
+if (!function_exists('rt_wrap_text')) {
+    function rt_wrap_text(string $text)
+    {
+        return '<span data-rt_translate="1">' . $text . '</span>';
+    }
+}
