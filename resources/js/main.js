@@ -37,22 +37,34 @@ function getTranslationFromStorage(key, lang) {
 }
 
 async function fetchTranslation(texts = [], lang) {
-    const data = await fetch(API_URL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            lang,
-            texts: texts
-        })
-    }).then(response => response.json());
+    if (texts.length === 0) {
+        return [];
+    }
+
+    const chunkSize = 10;
+    const chunked = [];
+
+    for (let i = 0; i < texts.length; i += chunkSize) {
+        const chunk = texts.slice(i, i + chunkSize);
+        chunked.push(fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                lang,
+                texts: chunk
+            })
+        }));
+    }
+
+    const data = await Promise.all(chunked)
+        .then(responses => Promise.all(responses.map(res => res.json())))
+        .then(data => data.flatMap(item => item.translations));
 
     console.log("Fetch translation data", data);
 
-    const translated = data.translations;
-
-    return translated;
+    return data;
 }
 
 function applyTranslation(parent, index, text) {
