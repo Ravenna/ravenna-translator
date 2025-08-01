@@ -9,6 +9,23 @@ const verifyText = (text) => {
     return regex.test(text);    
 }
 
+function removeAnimation(el) {
+    el.getAnimations().forEach(animation => {
+        animation.cancel();
+    });
+}
+
+function addPulseAnimation(el) {
+    el.animate([
+        { opacity: 1 },
+        { opacity: 0.5 },
+        { opacity: 1 }
+    ], {
+        duration: 1500,
+        iterations: Infinity
+    });
+}
+
 function getLanguage() {
     return navigator.language || 'en-US';
 }
@@ -41,30 +58,26 @@ async function fetchTranslation(texts = [], lang) {
         return [];
     }
 
-    const chunkSize = 10;
-    const chunked = [];
-
-    for (let i = 0; i < texts.length; i += chunkSize) {
-        const chunk = texts.slice(i, i + chunkSize);
-        chunked.push(fetch(API_URL, {
+    const response = await fetch(API_URL, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 lang,
-                texts: chunk
+                texts: texts
             })
-        }));
-    }
+        })
+        .then(response => response.json())
+        .then(data => data.translations || [])
+        .catch(error => {
+            console.error('Error fetching translations:', error);
+            throw new Error('Failed to fetch translations');
+        });
 
-    const data = await Promise.all(chunked)
-        .then(responses => Promise.all(responses.map(res => res.json())))
-        .then(data => data.flatMap(item => item.translations));
+    console.log("Fetched translations:", response);
 
-    console.log("Fetch translation data", data);
-
-    return data;
+    return response;
 }
 
 function applyTranslation(parent, index, text) {
@@ -96,6 +109,66 @@ function walkElement(el, index, texts) {
     }
 }
 
+const fetchTranslations = async (texts, lang) => {
+    const chunkSize = 10;
+
+    for (let i = 0; i < texts.length; i += chunkSize) {
+        const chunk = texts.slice(i, i + chunkSize);
+        const invalid = [];
+        let validTexts = chunk.reduce((acc, item) => {
+            if (verifyText(item.text)) {
+                acc.push(item);
+            } else {
+                console.warn(`Skipping invalid text: "${item.text}"`);
+                invalid.push(item);
+            }
+            return acc;
+        }, []);
+
+        validTexts = validTexts.filter(item => {
+            if (getTranslationFromStorage(item.key, lang)) {
+                console.log("Using stored translation for", item.text);
+                applyTranslation(item.parent, item.index, getTranslationFromStorage(item.key, lang));
+                invalid.push(item);
+                return false; // already translated
+            }
+            return true;
+        });
+
+        invalid.forEach(item => {
+            console.warn(`Invalid text skipped: "${item.text}"`);
+            removeAnimation(item.parent);
+        });
+
+        if (validTexts.length === 0) {
+            continue;
+        }
+
+        console.log("Fetching translations for chunk:", validTexts);
+
+        try {
+            const translations = await fetchTranslation(validTexts.map(item => item.text), lang);
+            
+            translations.forEach((item) => {
+                console.log(`Applying translation for key: ${item.key}, lang: ${lang}, text: ${item.value}`);
+                const from = texts.filter(t => t.key === item.key);
+
+                from.forEach(from => {
+                    applyTranslation(from.parent, from.index, item.value);
+                    storeTranslation(from.key, lang, item.value);
+                    removeAnimation(from.parent);
+                });
+            });
+        } catch (error) {
+            validTexts.forEach(item => {
+                console.error(`Error fetching translation for: "${item.text}"`, error);
+                removeAnimation(item.parent);
+            });
+            continue; // skip to next chunk on error
+        }
+    }
+};
+
 async function updateElement(el, isChildren = false) {
     const lang = getLanguage();
     const texts = [];
@@ -105,6 +178,7 @@ async function updateElement(el, isChildren = false) {
         const storedValue = getTranslationFromStorage(item.key, lang);
 
         if (storedValue) {
+            console.log("Using stored translation for", item.text, ":", storedValue);
             applyTranslation(item.parent, item.index, storedValue);
             return false; // already translated
         }
@@ -117,13 +191,7 @@ async function updateElement(el, isChildren = false) {
     }
 
     try {
-        const translated = await fetchTranslation(toTranslate.map(item => item.text), lang);
-
-        translated.forEach(item => {
-            const oldText = toTranslate.find(t => t.key === item.key);
-            applyTranslation(oldText.parent, oldText.index, item.value);
-            storeTranslation(item.key, lang, item.value);
-        });
+        fetchTranslations(toTranslate, lang);
     } catch (error) {
         // remove any ongoing animations
         texts.forEach(item => {
@@ -131,23 +199,6 @@ async function updateElement(el, isChildren = false) {
         });
         console.error('Translation error:', error);
     }
-}
-
-function removeAnimation(el) {
-    el.getAnimations().forEach(animation => {
-        animation.cancel();
-    });
-}
-
-function addPulseAnimation(el) {
-    el.animate([
-        { opacity: 1 },
-        { opacity: 0.5 },
-        { opacity: 1 }
-    ], {
-        duration: 1500,
-        iterations: Infinity
-    });
 }
 
 const truthful = element => element.dataset.rt_translate === 'true' || element.dataset.rt_translate === '1' || parseInt(element.dataset.rt_translate) === 1;
