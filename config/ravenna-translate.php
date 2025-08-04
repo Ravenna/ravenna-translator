@@ -9,4 +9,5 @@ return [
         'endpoint' => env('TRANSLATION_EXTERNAL_API_ENDPOINT', '/api'),
         'key' => env('TRANSLATION_EXTERNAL_API_KEY', 'your-api-key-here'),
     ],
+    "default_language" => env('TRANSLATION_DEFAULT_LANGUAGE', 'en'),
 ];

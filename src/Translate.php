@@ -14,6 +14,8 @@ class Translate
     const CACHE_TTL = 30; // days
 
     protected $locale;
+    protected $localeLanguage;
+    protected $localeRegion;
     protected $dbLocale;
 
     public function __construct(string $locale = '')
@@ -26,9 +28,11 @@ class Translate
             }
 
             $this->locale = $thisLocale['language'];
+            $this->localeLanguage = $thisLocale['language'];
 
             if (isset($thisLocale['region'])) {
                 $this->locale .= '-' . strtoupper($thisLocale['region']);
+                $this->localeRegion = strtoupper($thisLocale['region']);
             }
         } else {
             $this->locale = \Locale::acceptFromHttp(request()->header('Accept-Language'));
@@ -69,6 +73,20 @@ class Translate
                     'key' => $dbKey,
                     'value' => Cache::get($cacheKey)
                 ];
+
+                return;
+            }
+
+            $defaultLanguage = config('ravenna-translate.default_language');
+
+            if ($this->localeLanguage === $defaultLanguage) {
+                // If the locale is the default language, return the text as is
+                $translatedTexts[] = [
+                    'key' => $dbKey,
+                    'value' => $text
+                ];
+
+                Cache::put($cacheKey, $text, now()->addDays(self::CACHE_TTL));
 
                 return;
             }
