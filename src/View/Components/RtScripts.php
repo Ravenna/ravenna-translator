@@ -11,10 +11,10 @@ class RtScripts extends Component
 {
     protected array $defaultLanguage = [];
 
-    public function __construct(string | array $defaultLanguage = [])
+    public function __construct(string | array | null $defaultLanguage = [])
     {
-        if (is_string($defaultLanguage) && !empty($defaultLanguage)) {
-            $defaultLanguage = [$defaultLanguage];
+        if (is_string($defaultLanguage) || is_null($defaultLanguage)) {
+            $defaultLanguage = empty($defaultLanguage) ? [] : [$defaultLanguage];
         }
 
         $systemDefaultLanguage = config('ravenna-translate.default_language');
@@ -30,7 +30,10 @@ class RtScripts extends Component
 
     public function render()
     {
-        $string = '<script>window._ravennaTranslate = {defaultLanguages: []};';
+        $string = '<script>window._ravennaTranslate = {
+            defaultLanguages: [],
+            translating: {},
+        };';
 
         if (! empty($this->defaultLanguage)) {
             foreach ($this->defaultLanguage as $lang) {
