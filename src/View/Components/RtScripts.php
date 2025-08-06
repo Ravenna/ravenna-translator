@@ -30,17 +30,15 @@ class RtScripts extends Component
 
     public function render()
     {
-        $string = '<script>window.ravennaTranslate = {defaultLanguages: []};</script>';
+        $string = '<script>window._ravennaTranslate = {defaultLanguages: []};';
 
         if (! empty($this->defaultLanguage)) {
-            $string .= '<script>';
-
             foreach ($this->defaultLanguage as $lang) {
-                $string .= 'window.ravennaTranslate.defaultLanguages.push("' . $lang . '");';
+                $string .= 'window._ravennaTranslate.defaultLanguages.push("' . $lang . '");';
             }
-
-            $string .= '</script>';
         }
+
+        $string .= '</script>';
 
         $path = public_path(TranslateServiceProvider::PUBLIC_DIR . '/assets');
         $glob = glob($path . '/*.js');

@@ -2,6 +2,7 @@ import { md5 } from 'js-md5';
 
 const STORAGE_KEY = 'rt-translations';
 const API_URL = '/translations-api/v1';
+const CHUNK_SIZE = 100;
 
 function verifyText(text) {
     // regex to verify text content contains text and is not newline/punctuation only
@@ -110,10 +111,8 @@ function walkElement(el, index, texts) {
 }
 
 async function fetchTranslations(texts, lang) {
-    const chunkSize = 10;
-
-    for (let i = 0; i < texts.length; i += chunkSize) {
-        const chunk = texts.slice(i, i + chunkSize);
+    for (let i = 0; i < texts.length; i += CHUNK_SIZE) {
+        const chunk = texts.slice(i, i + CHUNK_SIZE);
         const invalid = [];
         let validTexts = chunk.reduce((acc, item) => {
             if (verifyText(item.text)) {
@@ -156,21 +155,31 @@ async function fetchTranslations(texts, lang) {
                 from.forEach(from => {
                     applyTranslation(from.parent, from.index, item.value);
                     storeTranslation(from.key, lang, item.value);
-                    removeAnimation(from.parent);
                 });
             });
         } catch (error) {
             validTexts.forEach(item => {
                 console.error(`Error fetching translation for: "${item.text}"`, error);
-                removeAnimation(item.parent);
             });
             continue; // skip to next chunk on error
         }
+
+        // always remove animations after processing a chunk
+        chunk.forEach(item => {
+            removeAnimation(item.parent);
+        });
     }
 };
 
 async function updateElement(el, isChildren = false) {
     const lang = getLanguage();
+
+    if (window._ravennaTranslate?.defaultLanguages?.some(dl => {
+        return dl === lang || dl === lang.split('-')[0] || dl === lang.split('-')[0].toUpperCase();
+    })) {
+        return;
+    }
+
     const texts = [];
     walkElement(el, 0, texts);
 
