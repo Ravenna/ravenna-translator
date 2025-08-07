@@ -201,6 +201,25 @@ async function handleTexts(texts, lang) {
     }
 }
 
+function storeMutationObserver(observer, el) {
+    const translationStore = window._ravennaTranslate;
+
+    if (!translationStore.mutationObservers) {
+        translationStore.mutationObservers = {};
+    }
+
+    translationStore.mutationObservers[el] = observer;
+}
+
+function removeMutationObserver(el) {
+    const translationStore = window._ravennaTranslate;
+
+    if (translationStore.mutationObservers && translationStore.mutationObservers[el]) {
+        translationStore.mutationObservers[el].disconnect();
+        delete translationStore.mutationObservers[el];
+    }
+}
+
 function fetchMutationTexts(mutationsList) {
     const texts = [];
 
@@ -227,19 +246,26 @@ function mutationCallback(mutationsList, observer) {
         return;
     }
 
+    translationStore.translating && (translationStore.translating[observer.observedElement] = true);
+
     console.log("Mutation observed:", mutationsList);
     
     const texts = fetchMutationTexts(mutationsList);
 
     if (texts.length === 0) {
         console.warn("No valid texts found in mutations.");
+        translationStore.translating && delete translationStore.translating[observer.observedElement];
         return;
     }
 
     handleTexts(texts, getLanguage())
         .catch(error => {
             console.error('Error handling mutations:', error);
-        });
+        })
+        .finally(() => {
+            translationStore.translating && delete translationStore.translating[observer.observedElement];
+        }
+    );
 }
 
 async function updateElement(el, isChildren = false) {
@@ -273,6 +299,13 @@ async function updateElement(el, isChildren = false) {
         childList: true,
         subtree: true
     });
+
+    storeMutationObserver(observer, el);
 }
 
 export default updateElement;
+
+export {
+    storeMutationObserver,
+    removeMutationObserver
+}

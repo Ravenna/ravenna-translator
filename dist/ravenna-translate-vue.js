@@ -1,28 +1,28 @@
-var Z = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {};
-function Q(s) {
-  if (Object.prototype.hasOwnProperty.call(s, "__esModule")) return s;
-  var c = s.default;
-  if (typeof c == "function") {
-    var u = function h() {
-      return this instanceof h ? Reflect.construct(c, arguments, this.constructor) : c.apply(this, arguments);
+var Q = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {};
+function tt(a) {
+  if (Object.prototype.hasOwnProperty.call(a, "__esModule")) return a;
+  var f = a.default;
+  if (typeof f == "function") {
+    var s = function h() {
+      return this instanceof h ? Reflect.construct(f, arguments, this.constructor) : f.apply(this, arguments);
     };
-    u.prototype = c.prototype;
-  } else u = {};
-  return Object.defineProperty(u, "__esModule", { value: !0 }), Object.keys(s).forEach(function(h) {
-    var d = Object.getOwnPropertyDescriptor(s, h);
-    Object.defineProperty(u, h, d.get ? d : {
+    s.prototype = f.prototype;
+  } else s = {};
+  return Object.defineProperty(s, "__esModule", { value: !0 }), Object.keys(a).forEach(function(h) {
+    var x = Object.getOwnPropertyDescriptor(a, h);
+    Object.defineProperty(s, h, x.get ? x : {
       enumerable: !0,
       get: function() {
-        return s[h];
+        return a[h];
       }
     });
-  }), u;
+  }), s;
 }
 var M = { exports: {} };
-const tt = {}, rt = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const rt = {}, et = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: tt
-}, Symbol.toStringTag, { value: "Module" })), z = /* @__PURE__ */ Q(rt);
+  default: rt
+}, Symbol.toStringTag, { value: "Module" })), z = /* @__PURE__ */ tt(et);
 /**
  * [js-md5]{@link https://github.com/emn178/js-md5}
  *
@@ -32,130 +32,130 @@ const tt = {}, rt = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
  * @copyright Chen, Yi-Cyuan 2014-2023
  * @license MIT
  */
-var k;
-function et() {
-  return k || (k = 1, function(s) {
+var H;
+function nt() {
+  return H || (H = 1, function(a) {
     (function() {
-      var c = "input is invalid type", u = "finalize already called", h = typeof window == "object", d = h ? window : {};
-      d.JS_MD5_NO_WINDOW && (h = !1);
-      var F = !h && typeof self == "object", x = !d.JS_MD5_NO_NODE_JS && typeof process == "object" && process.versions && process.versions.node;
-      x ? d = Z : F && (d = self);
-      var p = !d.JS_MD5_NO_COMMON_JS && !0 && s.exports, w = !d.JS_MD5_NO_ARRAY_BUFFER && typeof ArrayBuffer < "u", l = "0123456789abcdef".split(""), m = [128, 32768, 8388608, -2147483648], E = [0, 8, 16, 24], O = ["hex", "array", "digest", "buffer", "arrayBuffer", "base64"], b = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".split(""), v = [], C;
-      if (w) {
-        var U = new ArrayBuffer(68);
-        C = new Uint8Array(U), v = new Uint32Array(U);
+      var f = "input is invalid type", s = "finalize already called", h = typeof window == "object", x = h ? window : {};
+      x.JS_MD5_NO_WINDOW && (h = !1);
+      var F = !h && typeof self == "object", d = !x.JS_MD5_NO_NODE_JS && typeof process == "object" && process.versions && process.versions.node;
+      d ? x = Q : F && (x = self);
+      var v = !x.JS_MD5_NO_COMMON_JS && !0 && a.exports, E = !x.JS_MD5_NO_ARRAY_BUFFER && typeof ArrayBuffer < "u", c = "0123456789abcdef".split(""), q = [128, 32768, 8388608, -2147483648], w = [0, 8, 16, 24], O = ["hex", "array", "digest", "buffer", "arrayBuffer", "base64"], _ = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".split(""), y = [], U;
+      if (E) {
+        var j = new ArrayBuffer(68);
+        U = new Uint8Array(j), y = new Uint32Array(j);
       }
-      var g = Array.isArray;
-      (d.JS_MD5_NO_NODE_JS || !g) && (g = function(t) {
+      var A = Array.isArray;
+      (x.JS_MD5_NO_NODE_JS || !A) && (A = function(t) {
         return Object.prototype.toString.call(t) === "[object Array]";
       });
       var S = ArrayBuffer.isView;
-      w && (d.JS_MD5_NO_ARRAY_BUFFER_IS_VIEW || !S) && (S = function(t) {
+      E && (x.JS_MD5_NO_ARRAY_BUFFER_IS_VIEW || !S) && (S = function(t) {
         return typeof t == "object" && t.buffer && t.buffer.constructor === ArrayBuffer;
       });
-      var j = function(t) {
+      var D = function(t) {
         var e = typeof t;
         if (e === "string")
           return [t, !0];
         if (e !== "object" || t === null)
-          throw new Error(c);
-        if (w && t.constructor === ArrayBuffer)
+          throw new Error(f);
+        if (E && t.constructor === ArrayBuffer)
           return [new Uint8Array(t), !1];
-        if (!g(t) && !S(t))
-          throw new Error(c);
+        if (!A(t) && !S(t))
+          throw new Error(f);
         return [t, !1];
-      }, D = function(t) {
+      }, I = function(t) {
         return function(e) {
-          return new y(!0).update(e)[t]();
+          return new p(!0).update(e)[t]();
         };
-      }, q = function() {
-        var t = D("hex");
-        x && (t = G(t)), t.create = function() {
-          return new y();
+      }, G = function() {
+        var t = I("hex");
+        d && (t = X(t)), t.create = function() {
+          return new p();
         }, t.update = function(r) {
           return t.create().update(r);
-        };
-        for (var e = 0; e < O.length; ++e) {
-          var n = O[e];
-          t[n] = D(n);
-        }
-        return t;
-      }, G = function(t) {
-        var e = z, n = z.Buffer, r;
-        n.from && !d.JS_MD5_NO_BUFFER_FROM ? r = n.from : r = function(o) {
-          return new n(o);
-        };
-        var a = function(o) {
-          if (typeof o == "string")
-            return e.createHash("md5").update(o, "utf8").digest("hex");
-          if (o == null)
-            throw new Error(c);
-          return o.constructor === ArrayBuffer && (o = new Uint8Array(o)), g(o) || S(o) || o.constructor === n ? e.createHash("md5").update(r(o)).digest("hex") : t(o);
-        };
-        return a;
-      }, I = function(t) {
-        return function(e, n) {
-          return new N(e, !0).update(n)[t]();
-        };
-      }, X = function() {
-        var t = I("hex");
-        t.create = function(r) {
-          return new N(r);
-        }, t.update = function(r, a) {
-          return t.create(r).update(a);
         };
         for (var e = 0; e < O.length; ++e) {
           var n = O[e];
           t[n] = I(n);
         }
         return t;
+      }, X = function(t) {
+        var e = z, n = z.Buffer, r;
+        n.from && !x.JS_MD5_NO_BUFFER_FROM ? r = n.from : r = function(i) {
+          return new n(i);
+        };
+        var l = function(i) {
+          if (typeof i == "string")
+            return e.createHash("md5").update(i, "utf8").digest("hex");
+          if (i == null)
+            throw new Error(f);
+          return i.constructor === ArrayBuffer && (i = new Uint8Array(i)), A(i) || S(i) || i.constructor === n ? e.createHash("md5").update(r(i)).digest("hex") : t(i);
+        };
+        return l;
+      }, k = function(t) {
+        return function(e, n) {
+          return new T(e, !0).update(n)[t]();
+        };
+      }, Z = function() {
+        var t = k("hex");
+        t.create = function(r) {
+          return new T(r);
+        }, t.update = function(r, l) {
+          return t.create(r).update(l);
+        };
+        for (var e = 0; e < O.length; ++e) {
+          var n = O[e];
+          t[n] = k(n);
+        }
+        return t;
       };
-      function y(t) {
+      function p(t) {
         if (t)
-          v[0] = v[16] = v[1] = v[2] = v[3] = v[4] = v[5] = v[6] = v[7] = v[8] = v[9] = v[10] = v[11] = v[12] = v[13] = v[14] = v[15] = 0, this.blocks = v, this.buffer8 = C;
-        else if (w) {
+          y[0] = y[16] = y[1] = y[2] = y[3] = y[4] = y[5] = y[6] = y[7] = y[8] = y[9] = y[10] = y[11] = y[12] = y[13] = y[14] = y[15] = 0, this.blocks = y, this.buffer8 = U;
+        else if (E) {
           var e = new ArrayBuffer(68);
           this.buffer8 = new Uint8Array(e), this.blocks = new Uint32Array(e);
         } else
           this.blocks = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         this.h0 = this.h1 = this.h2 = this.h3 = this.start = this.bytes = this.hBytes = 0, this.finalized = this.hashed = !1, this.first = !0;
       }
-      y.prototype.update = function(t) {
+      p.prototype.update = function(t) {
         if (this.finalized)
-          throw new Error(u);
-        var e = j(t);
+          throw new Error(s);
+        var e = D(t);
         t = e[0];
-        for (var n = e[1], r, a = 0, o, i = t.length, f = this.blocks, _ = this.buffer8; a < i; ) {
-          if (this.hashed && (this.hashed = !1, f[0] = f[16], f[16] = f[1] = f[2] = f[3] = f[4] = f[5] = f[6] = f[7] = f[8] = f[9] = f[10] = f[11] = f[12] = f[13] = f[14] = f[15] = 0), n)
-            if (w)
-              for (o = this.start; a < i && o < 64; ++a)
-                r = t.charCodeAt(a), r < 128 ? _[o++] = r : r < 2048 ? (_[o++] = 192 | r >>> 6, _[o++] = 128 | r & 63) : r < 55296 || r >= 57344 ? (_[o++] = 224 | r >>> 12, _[o++] = 128 | r >>> 6 & 63, _[o++] = 128 | r & 63) : (r = 65536 + ((r & 1023) << 10 | t.charCodeAt(++a) & 1023), _[o++] = 240 | r >>> 18, _[o++] = 128 | r >>> 12 & 63, _[o++] = 128 | r >>> 6 & 63, _[o++] = 128 | r & 63);
+        for (var n = e[1], r, l = 0, i, o = t.length, u = this.blocks, b = this.buffer8; l < o; ) {
+          if (this.hashed && (this.hashed = !1, u[0] = u[16], u[16] = u[1] = u[2] = u[3] = u[4] = u[5] = u[6] = u[7] = u[8] = u[9] = u[10] = u[11] = u[12] = u[13] = u[14] = u[15] = 0), n)
+            if (E)
+              for (i = this.start; l < o && i < 64; ++l)
+                r = t.charCodeAt(l), r < 128 ? b[i++] = r : r < 2048 ? (b[i++] = 192 | r >>> 6, b[i++] = 128 | r & 63) : r < 55296 || r >= 57344 ? (b[i++] = 224 | r >>> 12, b[i++] = 128 | r >>> 6 & 63, b[i++] = 128 | r & 63) : (r = 65536 + ((r & 1023) << 10 | t.charCodeAt(++l) & 1023), b[i++] = 240 | r >>> 18, b[i++] = 128 | r >>> 12 & 63, b[i++] = 128 | r >>> 6 & 63, b[i++] = 128 | r & 63);
             else
-              for (o = this.start; a < i && o < 64; ++a)
-                r = t.charCodeAt(a), r < 128 ? f[o >>> 2] |= r << E[o++ & 3] : r < 2048 ? (f[o >>> 2] |= (192 | r >>> 6) << E[o++ & 3], f[o >>> 2] |= (128 | r & 63) << E[o++ & 3]) : r < 55296 || r >= 57344 ? (f[o >>> 2] |= (224 | r >>> 12) << E[o++ & 3], f[o >>> 2] |= (128 | r >>> 6 & 63) << E[o++ & 3], f[o >>> 2] |= (128 | r & 63) << E[o++ & 3]) : (r = 65536 + ((r & 1023) << 10 | t.charCodeAt(++a) & 1023), f[o >>> 2] |= (240 | r >>> 18) << E[o++ & 3], f[o >>> 2] |= (128 | r >>> 12 & 63) << E[o++ & 3], f[o >>> 2] |= (128 | r >>> 6 & 63) << E[o++ & 3], f[o >>> 2] |= (128 | r & 63) << E[o++ & 3]);
-          else if (w)
-            for (o = this.start; a < i && o < 64; ++a)
-              _[o++] = t[a];
+              for (i = this.start; l < o && i < 64; ++l)
+                r = t.charCodeAt(l), r < 128 ? u[i >>> 2] |= r << w[i++ & 3] : r < 2048 ? (u[i >>> 2] |= (192 | r >>> 6) << w[i++ & 3], u[i >>> 2] |= (128 | r & 63) << w[i++ & 3]) : r < 55296 || r >= 57344 ? (u[i >>> 2] |= (224 | r >>> 12) << w[i++ & 3], u[i >>> 2] |= (128 | r >>> 6 & 63) << w[i++ & 3], u[i >>> 2] |= (128 | r & 63) << w[i++ & 3]) : (r = 65536 + ((r & 1023) << 10 | t.charCodeAt(++l) & 1023), u[i >>> 2] |= (240 | r >>> 18) << w[i++ & 3], u[i >>> 2] |= (128 | r >>> 12 & 63) << w[i++ & 3], u[i >>> 2] |= (128 | r >>> 6 & 63) << w[i++ & 3], u[i >>> 2] |= (128 | r & 63) << w[i++ & 3]);
+          else if (E)
+            for (i = this.start; l < o && i < 64; ++l)
+              b[i++] = t[l];
           else
-            for (o = this.start; a < i && o < 64; ++a)
-              f[o >>> 2] |= t[a] << E[o++ & 3];
-          this.lastByteIndex = o, this.bytes += o - this.start, o >= 64 ? (this.start = o - 64, this.hash(), this.hashed = !0) : this.start = o;
+            for (i = this.start; l < o && i < 64; ++l)
+              u[i >>> 2] |= t[l] << w[i++ & 3];
+          this.lastByteIndex = i, this.bytes += i - this.start, i >= 64 ? (this.start = i - 64, this.hash(), this.hashed = !0) : this.start = i;
         }
         return this.bytes > 4294967295 && (this.hBytes += this.bytes / 4294967296 << 0, this.bytes = this.bytes % 4294967296), this;
-      }, y.prototype.finalize = function() {
+      }, p.prototype.finalize = function() {
         if (!this.finalized) {
           this.finalized = !0;
           var t = this.blocks, e = this.lastByteIndex;
-          t[e >>> 2] |= m[e & 3], e >= 56 && (this.hashed || this.hash(), t[0] = t[16], t[16] = t[1] = t[2] = t[3] = t[4] = t[5] = t[6] = t[7] = t[8] = t[9] = t[10] = t[11] = t[12] = t[13] = t[14] = t[15] = 0), t[14] = this.bytes << 3, t[15] = this.hBytes << 3 | this.bytes >>> 29, this.hash();
+          t[e >>> 2] |= q[e & 3], e >= 56 && (this.hashed || this.hash(), t[0] = t[16], t[16] = t[1] = t[2] = t[3] = t[4] = t[5] = t[6] = t[7] = t[8] = t[9] = t[10] = t[11] = t[12] = t[13] = t[14] = t[15] = 0), t[14] = this.bytes << 3, t[15] = this.hBytes << 3 | this.bytes >>> 29, this.hash();
         }
-      }, y.prototype.hash = function() {
-        var t, e, n, r, a, o, i = this.blocks;
-        this.first ? (t = i[0] - 680876937, t = (t << 7 | t >>> 25) - 271733879 << 0, r = (-1732584194 ^ t & 2004318071) + i[1] - 117830708, r = (r << 12 | r >>> 20) + t << 0, n = (-271733879 ^ r & (t ^ -271733879)) + i[2] - 1126478375, n = (n << 17 | n >>> 15) + r << 0, e = (t ^ n & (r ^ t)) + i[3] - 1316259209, e = (e << 22 | e >>> 10) + n << 0) : (t = this.h0, e = this.h1, n = this.h2, r = this.h3, t += (r ^ e & (n ^ r)) + i[0] - 680876936, t = (t << 7 | t >>> 25) + e << 0, r += (n ^ t & (e ^ n)) + i[1] - 389564586, r = (r << 12 | r >>> 20) + t << 0, n += (e ^ r & (t ^ e)) + i[2] + 606105819, n = (n << 17 | n >>> 15) + r << 0, e += (t ^ n & (r ^ t)) + i[3] - 1044525330, e = (e << 22 | e >>> 10) + n << 0), t += (r ^ e & (n ^ r)) + i[4] - 176418897, t = (t << 7 | t >>> 25) + e << 0, r += (n ^ t & (e ^ n)) + i[5] + 1200080426, r = (r << 12 | r >>> 20) + t << 0, n += (e ^ r & (t ^ e)) + i[6] - 1473231341, n = (n << 17 | n >>> 15) + r << 0, e += (t ^ n & (r ^ t)) + i[7] - 45705983, e = (e << 22 | e >>> 10) + n << 0, t += (r ^ e & (n ^ r)) + i[8] + 1770035416, t = (t << 7 | t >>> 25) + e << 0, r += (n ^ t & (e ^ n)) + i[9] - 1958414417, r = (r << 12 | r >>> 20) + t << 0, n += (e ^ r & (t ^ e)) + i[10] - 42063, n = (n << 17 | n >>> 15) + r << 0, e += (t ^ n & (r ^ t)) + i[11] - 1990404162, e = (e << 22 | e >>> 10) + n << 0, t += (r ^ e & (n ^ r)) + i[12] + 1804603682, t = (t << 7 | t >>> 25) + e << 0, r += (n ^ t & (e ^ n)) + i[13] - 40341101, r = (r << 12 | r >>> 20) + t << 0, n += (e ^ r & (t ^ e)) + i[14] - 1502002290, n = (n << 17 | n >>> 15) + r << 0, e += (t ^ n & (r ^ t)) + i[15] + 1236535329, e = (e << 22 | e >>> 10) + n << 0, t += (n ^ r & (e ^ n)) + i[1] - 165796510, t = (t << 5 | t >>> 27) + e << 0, r += (e ^ n & (t ^ e)) + i[6] - 1069501632, r = (r << 9 | r >>> 23) + t << 0, n += (t ^ e & (r ^ t)) + i[11] + 643717713, n = (n << 14 | n >>> 18) + r << 0, e += (r ^ t & (n ^ r)) + i[0] - 373897302, e = (e << 20 | e >>> 12) + n << 0, t += (n ^ r & (e ^ n)) + i[5] - 701558691, t = (t << 5 | t >>> 27) + e << 0, r += (e ^ n & (t ^ e)) + i[10] + 38016083, r = (r << 9 | r >>> 23) + t << 0, n += (t ^ e & (r ^ t)) + i[15] - 660478335, n = (n << 14 | n >>> 18) + r << 0, e += (r ^ t & (n ^ r)) + i[4] - 405537848, e = (e << 20 | e >>> 12) + n << 0, t += (n ^ r & (e ^ n)) + i[9] + 568446438, t = (t << 5 | t >>> 27) + e << 0, r += (e ^ n & (t ^ e)) + i[14] - 1019803690, r = (r << 9 | r >>> 23) + t << 0, n += (t ^ e & (r ^ t)) + i[3] - 187363961, n = (n << 14 | n >>> 18) + r << 0, e += (r ^ t & (n ^ r)) + i[8] + 1163531501, e = (e << 20 | e >>> 12) + n << 0, t += (n ^ r & (e ^ n)) + i[13] - 1444681467, t = (t << 5 | t >>> 27) + e << 0, r += (e ^ n & (t ^ e)) + i[2] - 51403784, r = (r << 9 | r >>> 23) + t << 0, n += (t ^ e & (r ^ t)) + i[7] + 1735328473, n = (n << 14 | n >>> 18) + r << 0, e += (r ^ t & (n ^ r)) + i[12] - 1926607734, e = (e << 20 | e >>> 12) + n << 0, a = e ^ n, t += (a ^ r) + i[5] - 378558, t = (t << 4 | t >>> 28) + e << 0, r += (a ^ t) + i[8] - 2022574463, r = (r << 11 | r >>> 21) + t << 0, o = r ^ t, n += (o ^ e) + i[11] + 1839030562, n = (n << 16 | n >>> 16) + r << 0, e += (o ^ n) + i[14] - 35309556, e = (e << 23 | e >>> 9) + n << 0, a = e ^ n, t += (a ^ r) + i[1] - 1530992060, t = (t << 4 | t >>> 28) + e << 0, r += (a ^ t) + i[4] + 1272893353, r = (r << 11 | r >>> 21) + t << 0, o = r ^ t, n += (o ^ e) + i[7] - 155497632, n = (n << 16 | n >>> 16) + r << 0, e += (o ^ n) + i[10] - 1094730640, e = (e << 23 | e >>> 9) + n << 0, a = e ^ n, t += (a ^ r) + i[13] + 681279174, t = (t << 4 | t >>> 28) + e << 0, r += (a ^ t) + i[0] - 358537222, r = (r << 11 | r >>> 21) + t << 0, o = r ^ t, n += (o ^ e) + i[3] - 722521979, n = (n << 16 | n >>> 16) + r << 0, e += (o ^ n) + i[6] + 76029189, e = (e << 23 | e >>> 9) + n << 0, a = e ^ n, t += (a ^ r) + i[9] - 640364487, t = (t << 4 | t >>> 28) + e << 0, r += (a ^ t) + i[12] - 421815835, r = (r << 11 | r >>> 21) + t << 0, o = r ^ t, n += (o ^ e) + i[15] + 530742520, n = (n << 16 | n >>> 16) + r << 0, e += (o ^ n) + i[2] - 995338651, e = (e << 23 | e >>> 9) + n << 0, t += (n ^ (e | ~r)) + i[0] - 198630844, t = (t << 6 | t >>> 26) + e << 0, r += (e ^ (t | ~n)) + i[7] + 1126891415, r = (r << 10 | r >>> 22) + t << 0, n += (t ^ (r | ~e)) + i[14] - 1416354905, n = (n << 15 | n >>> 17) + r << 0, e += (r ^ (n | ~t)) + i[5] - 57434055, e = (e << 21 | e >>> 11) + n << 0, t += (n ^ (e | ~r)) + i[12] + 1700485571, t = (t << 6 | t >>> 26) + e << 0, r += (e ^ (t | ~n)) + i[3] - 1894986606, r = (r << 10 | r >>> 22) + t << 0, n += (t ^ (r | ~e)) + i[10] - 1051523, n = (n << 15 | n >>> 17) + r << 0, e += (r ^ (n | ~t)) + i[1] - 2054922799, e = (e << 21 | e >>> 11) + n << 0, t += (n ^ (e | ~r)) + i[8] + 1873313359, t = (t << 6 | t >>> 26) + e << 0, r += (e ^ (t | ~n)) + i[15] - 30611744, r = (r << 10 | r >>> 22) + t << 0, n += (t ^ (r | ~e)) + i[6] - 1560198380, n = (n << 15 | n >>> 17) + r << 0, e += (r ^ (n | ~t)) + i[13] + 1309151649, e = (e << 21 | e >>> 11) + n << 0, t += (n ^ (e | ~r)) + i[4] - 145523070, t = (t << 6 | t >>> 26) + e << 0, r += (e ^ (t | ~n)) + i[11] - 1120210379, r = (r << 10 | r >>> 22) + t << 0, n += (t ^ (r | ~e)) + i[2] + 718787259, n = (n << 15 | n >>> 17) + r << 0, e += (r ^ (n | ~t)) + i[9] - 343485551, e = (e << 21 | e >>> 11) + n << 0, this.first ? (this.h0 = t + 1732584193 << 0, this.h1 = e - 271733879 << 0, this.h2 = n - 1732584194 << 0, this.h3 = r + 271733878 << 0, this.first = !1) : (this.h0 = this.h0 + t << 0, this.h1 = this.h1 + e << 0, this.h2 = this.h2 + n << 0, this.h3 = this.h3 + r << 0);
-      }, y.prototype.hex = function() {
+      }, p.prototype.hash = function() {
+        var t, e, n, r, l, i, o = this.blocks;
+        this.first ? (t = o[0] - 680876937, t = (t << 7 | t >>> 25) - 271733879 << 0, r = (-1732584194 ^ t & 2004318071) + o[1] - 117830708, r = (r << 12 | r >>> 20) + t << 0, n = (-271733879 ^ r & (t ^ -271733879)) + o[2] - 1126478375, n = (n << 17 | n >>> 15) + r << 0, e = (t ^ n & (r ^ t)) + o[3] - 1316259209, e = (e << 22 | e >>> 10) + n << 0) : (t = this.h0, e = this.h1, n = this.h2, r = this.h3, t += (r ^ e & (n ^ r)) + o[0] - 680876936, t = (t << 7 | t >>> 25) + e << 0, r += (n ^ t & (e ^ n)) + o[1] - 389564586, r = (r << 12 | r >>> 20) + t << 0, n += (e ^ r & (t ^ e)) + o[2] + 606105819, n = (n << 17 | n >>> 15) + r << 0, e += (t ^ n & (r ^ t)) + o[3] - 1044525330, e = (e << 22 | e >>> 10) + n << 0), t += (r ^ e & (n ^ r)) + o[4] - 176418897, t = (t << 7 | t >>> 25) + e << 0, r += (n ^ t & (e ^ n)) + o[5] + 1200080426, r = (r << 12 | r >>> 20) + t << 0, n += (e ^ r & (t ^ e)) + o[6] - 1473231341, n = (n << 17 | n >>> 15) + r << 0, e += (t ^ n & (r ^ t)) + o[7] - 45705983, e = (e << 22 | e >>> 10) + n << 0, t += (r ^ e & (n ^ r)) + o[8] + 1770035416, t = (t << 7 | t >>> 25) + e << 0, r += (n ^ t & (e ^ n)) + o[9] - 1958414417, r = (r << 12 | r >>> 20) + t << 0, n += (e ^ r & (t ^ e)) + o[10] - 42063, n = (n << 17 | n >>> 15) + r << 0, e += (t ^ n & (r ^ t)) + o[11] - 1990404162, e = (e << 22 | e >>> 10) + n << 0, t += (r ^ e & (n ^ r)) + o[12] + 1804603682, t = (t << 7 | t >>> 25) + e << 0, r += (n ^ t & (e ^ n)) + o[13] - 40341101, r = (r << 12 | r >>> 20) + t << 0, n += (e ^ r & (t ^ e)) + o[14] - 1502002290, n = (n << 17 | n >>> 15) + r << 0, e += (t ^ n & (r ^ t)) + o[15] + 1236535329, e = (e << 22 | e >>> 10) + n << 0, t += (n ^ r & (e ^ n)) + o[1] - 165796510, t = (t << 5 | t >>> 27) + e << 0, r += (e ^ n & (t ^ e)) + o[6] - 1069501632, r = (r << 9 | r >>> 23) + t << 0, n += (t ^ e & (r ^ t)) + o[11] + 643717713, n = (n << 14 | n >>> 18) + r << 0, e += (r ^ t & (n ^ r)) + o[0] - 373897302, e = (e << 20 | e >>> 12) + n << 0, t += (n ^ r & (e ^ n)) + o[5] - 701558691, t = (t << 5 | t >>> 27) + e << 0, r += (e ^ n & (t ^ e)) + o[10] + 38016083, r = (r << 9 | r >>> 23) + t << 0, n += (t ^ e & (r ^ t)) + o[15] - 660478335, n = (n << 14 | n >>> 18) + r << 0, e += (r ^ t & (n ^ r)) + o[4] - 405537848, e = (e << 20 | e >>> 12) + n << 0, t += (n ^ r & (e ^ n)) + o[9] + 568446438, t = (t << 5 | t >>> 27) + e << 0, r += (e ^ n & (t ^ e)) + o[14] - 1019803690, r = (r << 9 | r >>> 23) + t << 0, n += (t ^ e & (r ^ t)) + o[3] - 187363961, n = (n << 14 | n >>> 18) + r << 0, e += (r ^ t & (n ^ r)) + o[8] + 1163531501, e = (e << 20 | e >>> 12) + n << 0, t += (n ^ r & (e ^ n)) + o[13] - 1444681467, t = (t << 5 | t >>> 27) + e << 0, r += (e ^ n & (t ^ e)) + o[2] - 51403784, r = (r << 9 | r >>> 23) + t << 0, n += (t ^ e & (r ^ t)) + o[7] + 1735328473, n = (n << 14 | n >>> 18) + r << 0, e += (r ^ t & (n ^ r)) + o[12] - 1926607734, e = (e << 20 | e >>> 12) + n << 0, l = e ^ n, t += (l ^ r) + o[5] - 378558, t = (t << 4 | t >>> 28) + e << 0, r += (l ^ t) + o[8] - 2022574463, r = (r << 11 | r >>> 21) + t << 0, i = r ^ t, n += (i ^ e) + o[11] + 1839030562, n = (n << 16 | n >>> 16) + r << 0, e += (i ^ n) + o[14] - 35309556, e = (e << 23 | e >>> 9) + n << 0, l = e ^ n, t += (l ^ r) + o[1] - 1530992060, t = (t << 4 | t >>> 28) + e << 0, r += (l ^ t) + o[4] + 1272893353, r = (r << 11 | r >>> 21) + t << 0, i = r ^ t, n += (i ^ e) + o[7] - 155497632, n = (n << 16 | n >>> 16) + r << 0, e += (i ^ n) + o[10] - 1094730640, e = (e << 23 | e >>> 9) + n << 0, l = e ^ n, t += (l ^ r) + o[13] + 681279174, t = (t << 4 | t >>> 28) + e << 0, r += (l ^ t) + o[0] - 358537222, r = (r << 11 | r >>> 21) + t << 0, i = r ^ t, n += (i ^ e) + o[3] - 722521979, n = (n << 16 | n >>> 16) + r << 0, e += (i ^ n) + o[6] + 76029189, e = (e << 23 | e >>> 9) + n << 0, l = e ^ n, t += (l ^ r) + o[9] - 640364487, t = (t << 4 | t >>> 28) + e << 0, r += (l ^ t) + o[12] - 421815835, r = (r << 11 | r >>> 21) + t << 0, i = r ^ t, n += (i ^ e) + o[15] + 530742520, n = (n << 16 | n >>> 16) + r << 0, e += (i ^ n) + o[2] - 995338651, e = (e << 23 | e >>> 9) + n << 0, t += (n ^ (e | ~r)) + o[0] - 198630844, t = (t << 6 | t >>> 26) + e << 0, r += (e ^ (t | ~n)) + o[7] + 1126891415, r = (r << 10 | r >>> 22) + t << 0, n += (t ^ (r | ~e)) + o[14] - 1416354905, n = (n << 15 | n >>> 17) + r << 0, e += (r ^ (n | ~t)) + o[5] - 57434055, e = (e << 21 | e >>> 11) + n << 0, t += (n ^ (e | ~r)) + o[12] + 1700485571, t = (t << 6 | t >>> 26) + e << 0, r += (e ^ (t | ~n)) + o[3] - 1894986606, r = (r << 10 | r >>> 22) + t << 0, n += (t ^ (r | ~e)) + o[10] - 1051523, n = (n << 15 | n >>> 17) + r << 0, e += (r ^ (n | ~t)) + o[1] - 2054922799, e = (e << 21 | e >>> 11) + n << 0, t += (n ^ (e | ~r)) + o[8] + 1873313359, t = (t << 6 | t >>> 26) + e << 0, r += (e ^ (t | ~n)) + o[15] - 30611744, r = (r << 10 | r >>> 22) + t << 0, n += (t ^ (r | ~e)) + o[6] - 1560198380, n = (n << 15 | n >>> 17) + r << 0, e += (r ^ (n | ~t)) + o[13] + 1309151649, e = (e << 21 | e >>> 11) + n << 0, t += (n ^ (e | ~r)) + o[4] - 145523070, t = (t << 6 | t >>> 26) + e << 0, r += (e ^ (t | ~n)) + o[11] - 1120210379, r = (r << 10 | r >>> 22) + t << 0, n += (t ^ (r | ~e)) + o[2] + 718787259, n = (n << 15 | n >>> 17) + r << 0, e += (r ^ (n | ~t)) + o[9] - 343485551, e = (e << 21 | e >>> 11) + n << 0, this.first ? (this.h0 = t + 1732584193 << 0, this.h1 = e - 271733879 << 0, this.h2 = n - 1732584194 << 0, this.h3 = r + 271733878 << 0, this.first = !1) : (this.h0 = this.h0 + t << 0, this.h1 = this.h1 + e << 0, this.h2 = this.h2 + n << 0, this.h3 = this.h3 + r << 0);
+      }, p.prototype.hex = function() {
         this.finalize();
         var t = this.h0, e = this.h1, n = this.h2, r = this.h3;
-        return l[t >>> 4 & 15] + l[t & 15] + l[t >>> 12 & 15] + l[t >>> 8 & 15] + l[t >>> 20 & 15] + l[t >>> 16 & 15] + l[t >>> 28 & 15] + l[t >>> 24 & 15] + l[e >>> 4 & 15] + l[e & 15] + l[e >>> 12 & 15] + l[e >>> 8 & 15] + l[e >>> 20 & 15] + l[e >>> 16 & 15] + l[e >>> 28 & 15] + l[e >>> 24 & 15] + l[n >>> 4 & 15] + l[n & 15] + l[n >>> 12 & 15] + l[n >>> 8 & 15] + l[n >>> 20 & 15] + l[n >>> 16 & 15] + l[n >>> 28 & 15] + l[n >>> 24 & 15] + l[r >>> 4 & 15] + l[r & 15] + l[r >>> 12 & 15] + l[r >>> 8 & 15] + l[r >>> 20 & 15] + l[r >>> 16 & 15] + l[r >>> 28 & 15] + l[r >>> 24 & 15];
-      }, y.prototype.toString = y.prototype.hex, y.prototype.digest = function() {
+        return c[t >>> 4 & 15] + c[t & 15] + c[t >>> 12 & 15] + c[t >>> 8 & 15] + c[t >>> 20 & 15] + c[t >>> 16 & 15] + c[t >>> 28 & 15] + c[t >>> 24 & 15] + c[e >>> 4 & 15] + c[e & 15] + c[e >>> 12 & 15] + c[e >>> 8 & 15] + c[e >>> 20 & 15] + c[e >>> 16 & 15] + c[e >>> 28 & 15] + c[e >>> 24 & 15] + c[n >>> 4 & 15] + c[n & 15] + c[n >>> 12 & 15] + c[n >>> 8 & 15] + c[n >>> 20 & 15] + c[n >>> 16 & 15] + c[n >>> 28 & 15] + c[n >>> 24 & 15] + c[r >>> 4 & 15] + c[r & 15] + c[r >>> 12 & 15] + c[r >>> 8 & 15] + c[r >>> 20 & 15] + c[r >>> 16 & 15] + c[r >>> 28 & 15] + c[r >>> 24 & 15];
+      }, p.prototype.toString = p.prototype.hex, p.prototype.digest = function() {
         this.finalize();
         var t = this.h0, e = this.h1, n = this.h2, r = this.h3;
         return [
@@ -176,55 +176,55 @@ function et() {
           r >>> 16 & 255,
           r >>> 24 & 255
         ];
-      }, y.prototype.array = y.prototype.digest, y.prototype.arrayBuffer = function() {
+      }, p.prototype.array = p.prototype.digest, p.prototype.arrayBuffer = function() {
         this.finalize();
         var t = new ArrayBuffer(16), e = new Uint32Array(t);
         return e[0] = this.h0, e[1] = this.h1, e[2] = this.h2, e[3] = this.h3, t;
-      }, y.prototype.buffer = y.prototype.arrayBuffer, y.prototype.base64 = function() {
-        for (var t, e, n, r = "", a = this.array(), o = 0; o < 15; )
-          t = a[o++], e = a[o++], n = a[o++], r += b[t >>> 2] + b[(t << 4 | e >>> 4) & 63] + b[(e << 2 | n >>> 6) & 63] + b[n & 63];
-        return t = a[o], r += b[t >>> 2] + b[t << 4 & 63] + "==", r;
+      }, p.prototype.buffer = p.prototype.arrayBuffer, p.prototype.base64 = function() {
+        for (var t, e, n, r = "", l = this.array(), i = 0; i < 15; )
+          t = l[i++], e = l[i++], n = l[i++], r += _[t >>> 2] + _[(t << 4 | e >>> 4) & 63] + _[(e << 2 | n >>> 6) & 63] + _[n & 63];
+        return t = l[i], r += _[t >>> 2] + _[t << 4 & 63] + "==", r;
       };
-      function N(t, e) {
-        var n, r = j(t);
+      function T(t, e) {
+        var n, r = D(t);
         if (t = r[0], r[1]) {
-          var a = [], o = t.length, i = 0, f;
-          for (n = 0; n < o; ++n)
-            f = t.charCodeAt(n), f < 128 ? a[i++] = f : f < 2048 ? (a[i++] = 192 | f >>> 6, a[i++] = 128 | f & 63) : f < 55296 || f >= 57344 ? (a[i++] = 224 | f >>> 12, a[i++] = 128 | f >>> 6 & 63, a[i++] = 128 | f & 63) : (f = 65536 + ((f & 1023) << 10 | t.charCodeAt(++n) & 1023), a[i++] = 240 | f >>> 18, a[i++] = 128 | f >>> 12 & 63, a[i++] = 128 | f >>> 6 & 63, a[i++] = 128 | f & 63);
-          t = a;
+          var l = [], i = t.length, o = 0, u;
+          for (n = 0; n < i; ++n)
+            u = t.charCodeAt(n), u < 128 ? l[o++] = u : u < 2048 ? (l[o++] = 192 | u >>> 6, l[o++] = 128 | u & 63) : u < 55296 || u >= 57344 ? (l[o++] = 224 | u >>> 12, l[o++] = 128 | u >>> 6 & 63, l[o++] = 128 | u & 63) : (u = 65536 + ((u & 1023) << 10 | t.charCodeAt(++n) & 1023), l[o++] = 240 | u >>> 18, l[o++] = 128 | u >>> 12 & 63, l[o++] = 128 | u >>> 6 & 63, l[o++] = 128 | u & 63);
+          t = l;
         }
-        t.length > 64 && (t = new y(!0).update(t).array());
-        var _ = [], J = [];
+        t.length > 64 && (t = new p(!0).update(t).array());
+        var b = [], J = [];
         for (n = 0; n < 64; ++n) {
           var P = t[n] || 0;
-          _[n] = 92 ^ P, J[n] = 54 ^ P;
+          b[n] = 92 ^ P, J[n] = 54 ^ P;
         }
-        y.call(this, e), this.update(J), this.oKeyPad = _, this.inner = !0, this.sharedMemory = e;
+        p.call(this, e), this.update(J), this.oKeyPad = b, this.inner = !0, this.sharedMemory = e;
       }
-      N.prototype = new y(), N.prototype.finalize = function() {
-        if (y.prototype.finalize.call(this), this.inner) {
+      T.prototype = new p(), T.prototype.finalize = function() {
+        if (p.prototype.finalize.call(this), this.inner) {
           this.inner = !1;
           var t = this.array();
-          y.call(this, this.sharedMemory), this.update(this.oKeyPad), this.update(t), y.prototype.finalize.call(this);
+          p.call(this, this.sharedMemory), this.update(this.oKeyPad), this.update(t), p.prototype.finalize.call(this);
         }
       };
-      var A = q();
-      A.md5 = A, A.md5.hmac = X(), p ? s.exports = A : d.md5 = A;
+      var g = G();
+      g.md5 = g, g.md5.hmac = Z(), v ? a.exports = g : x.md5 = g;
     })();
   }(M)), M.exports;
 }
-var nt = et();
-const W = "rt-translations", it = "/translations-api/v1", H = 100;
-function $(s) {
-  return /[^\s.,!?;:()]+/.test(s);
+var ot = nt();
+const $ = "rt-translations", it = "/translations-api/v1", K = 100;
+function L(a) {
+  return /[^\s.,!?;:()]+/.test(a);
 }
-function T(s) {
-  s.getAnimations().forEach((c) => {
-    c.cancel();
+function N(a) {
+  a.getAnimations().forEach((f) => {
+    f.cancel();
   });
 }
-function ot(s) {
-  s.animate([
+function at(a) {
+  a.animate([
     { opacity: 1 },
     { opacity: 0.5 },
     { opacity: 1 }
@@ -233,104 +233,159 @@ function ot(s) {
     iterations: 1 / 0
   });
 }
-function L() {
+function m() {
   return navigator.language || "en-US";
 }
 function Y() {
-  return JSON.parse(localStorage.getItem(W) || "{}");
+  return JSON.parse(localStorage.getItem($) || "{}");
 }
-function at(s, c, u) {
+function st(a, f, s) {
   const h = Y();
-  console.log("Store translation", { key: s, lang: c, value: u }), h[s] || (h[s] = {}), h[s][c] = u, localStorage.setItem(W, JSON.stringify(h));
+  console.log("Store translation", { key: a, lang: f, value: s }), h[a] || (h[a] = {}), h[a][f] = s, localStorage.setItem($, JSON.stringify(h));
 }
-function R(s, c) {
+function R(a, f) {
   var h;
-  return ((h = Y()[s]) == null ? void 0 : h[c]) || null;
+  return ((h = Y()[a]) == null ? void 0 : h[f]) || null;
 }
-async function st(s = [], c) {
-  if (s.length === 0)
+async function ft(a = [], f) {
+  if (a.length === 0)
     return [];
-  const u = await fetch(it, {
+  const s = await fetch(it, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      lang: c,
-      texts: s
+      lang: f,
+      texts: a
     })
   }).then((h) => h.json()).then((h) => h.translations || []).catch((h) => {
     throw console.error("Error fetching translations:", h), new Error("Failed to fetch translations");
   });
-  return console.log("Fetched translations:", u), u;
+  return console.log("Fetched translations:", s), s;
 }
-function B(s, c, u) {
-  const h = s.childNodes[c];
-  h ? h.textContent = u : el.textContent = u, T(s);
+function B(a, f, s) {
+  const h = a.childNodes[f];
+  h ? h.textContent = s : el.textContent = s, N(a);
 }
-function V(s, c, u) {
-  if (s.nodeType === Node.TEXT_NODE && s.textContent.trim() && $(s.textContent)) {
-    const h = s.textContent.trim(), d = L(), F = nt.md5(d + h), x = s.parentNode;
-    x.dataset.translateKey = F, ot(x), u.push({ text: h, key: F, parent: x, index: c });
-  } else s.nodeType === Node.ELEMENT_NODE && s.childNodes.forEach((h, d) => V(h, d, u));
+function C(a, f, s) {
+  if (a.nodeType === Node.TEXT_NODE && a.textContent.trim() && L(a.textContent)) {
+    const h = a.textContent.trim(), x = m(), F = ot.md5(x + h), d = a.parentNode;
+    d.dataset.translateKey = F, at(d), s.push({ text: h, key: F, parent: d, index: f });
+  } else a.nodeType === Node.ELEMENT_NODE && a.childNodes.forEach((h, x) => C(h, x, s));
 }
-async function ft(s, c) {
-  for (let u = 0; u < s.length; u += H) {
-    const h = s.slice(u, u + H), d = [];
-    let F = h.reduce((x, p) => ($(p.text) ? x.push(p) : (console.warn(`Skipping invalid text: "${p.text}"`), d.push(p)), x), []);
-    if (F = F.filter((x) => R(x.key, c) ? (console.log("Using stored translation for", x.text), B(x.parent, x.index, R(x.key, c)), d.push(x), !1) : !0), d.forEach((x) => {
-      console.warn(`Invalid text skipped: "${x.text}"`), T(x.parent);
+async function ht(a, f) {
+  for (let s = 0; s < a.length; s += K) {
+    const h = a.slice(s, s + K), x = [];
+    let F = h.reduce((d, v) => (L(v.text) ? d.push(v) : (console.warn(`Skipping invalid text: "${v.text}"`), x.push(v)), d), []);
+    if (F = F.filter((d) => R(d.key, f) ? (console.log("Using stored translation for", d.text), B(d.parent, d.index, R(d.key, f)), x.push(d), !1) : !0), x.forEach((d) => {
+      console.warn(`Invalid text skipped: "${d.text}"`), N(d.parent);
     }), F.length !== 0) {
       console.log("Fetching translations for chunk:", F);
       try {
-        (await st(F.map((p) => p.text), c)).forEach((p) => {
-          console.log(`Applying translation for key: ${p.key}, lang: ${c}, text: ${p.value}`), s.filter((l) => l.key === p.key).forEach((l) => {
-            B(l.parent, l.index, p.value), at(l.key, c, p.value);
+        (await ft(F.map((v) => v.text), f)).forEach((v) => {
+          console.log(`Applying translation for key: ${v.key}, lang: ${f}, text: ${v.value}`), a.filter((c) => c.key === v.key).forEach((c) => {
+            B(c.parent, c.index, v.value), st(c.key, f, v.value);
           });
         });
-      } catch (x) {
-        F.forEach((p) => {
-          console.error(`Error fetching translation for: "${p.text}"`, x);
+      } catch (d) {
+        F.forEach((v) => {
+          console.error(`Error fetching translation for: "${v.text}"`, d);
         });
         continue;
       }
-      h.forEach((x) => {
-        T(x.parent);
+      h.forEach((d) => {
+        N(d.parent);
       });
     }
   }
 }
-async function K(s, c = !1) {
-  var F, x;
-  const u = L();
-  if ((x = (F = window._ravennaTranslate) == null ? void 0 : F.defaultLanguages) != null && x.some((p) => p === u || p === u.split("-")[0] || p === u.split("-")[0].toUpperCase()))
-    return;
-  const h = [];
-  V(s, 0, h);
-  const d = h.filter((p) => {
-    const w = R(p.key, u);
-    return w ? (console.log("Using stored translation for", p.text, ":", w), B(p.parent, p.index, w), !1) : !0;
+function lt(a, f) {
+  return a.filter((s) => {
+    const h = R(s.key, f);
+    return h ? (console.log("Using stored translation for", s.text, ":", h), B(s.parent, s.index, h), !1) : !0;
   });
-  if (d.length !== 0)
+}
+async function V(a, f) {
+  const s = lt(a, f);
+  if (s.length !== 0)
     try {
-      ft(d, u);
-    } catch (p) {
-      h.forEach((w) => {
-        T(w.parent);
-      }), console.error("Translation error:", p);
+      await ht(s, f);
+    } catch (h) {
+      a.forEach((x) => {
+        N(x.parent);
+      }), console.error("Translation error:", h);
     }
 }
-const ht = {
-  mounted(s, c) {
-    const u = c.modifiers.children, h = c.modifiers.global;
-    K(s, u), h && window.addEventListener("language-changed", () => {
-      K(s, u);
+function ut(a, f) {
+  const s = window._ravennaTranslate;
+  s.mutationObservers || (s.mutationObservers = {}), s.mutationObservers[f] = a;
+}
+function ct(a) {
+  const f = window._ravennaTranslate;
+  f.mutationObservers && f.mutationObservers[a] && (f.mutationObservers[a].disconnect(), delete f.mutationObservers[a]);
+}
+function xt(a) {
+  const f = [];
+  for (const s of a)
+    s.type === "childList" && s.addedNodes.forEach((h) => {
+      C(h, 0, f);
+    });
+  return f;
+}
+function dt(a, f) {
+  var x;
+  const s = window._ravennaTranslate;
+  if (!f.observedElement) {
+    console.warn("No observed element found, skipping mutation handling.");
+    return;
+  }
+  if ((x = s == null ? void 0 : s.translating) != null && x[f.observedElement]) {
+    console.warn("Element is already being translated, skipping:", f.observedElement);
+    return;
+  }
+  s.translating && (s.translating[f.observedElement] = !0), console.log("Mutation observed:", a);
+  const h = xt(a);
+  if (h.length === 0) {
+    console.warn("No valid texts found in mutations."), s.translating && delete s.translating[f.observedElement];
+    return;
+  }
+  V(h, m()).catch((F) => {
+    console.error("Error handling mutations:", F);
+  }).finally(
+    () => {
+      s.translating && delete s.translating[f.observedElement];
+    }
+  );
+}
+async function W(a, f = !1) {
+  var d;
+  const s = window._ravennaTranslate, h = m();
+  if ((d = s == null ? void 0 : s.defaultLanguages) != null && d.some((v) => v === h || v === h.split("-")[0] || v === h.split("-")[0].toUpperCase()))
+    return;
+  const x = [];
+  if (C(a, 0, x), x.length === 0) {
+    console.warn("No translatable texts found in element:", a);
+    return;
+  }
+  s.translating && (s.translating[a] = !0), await V(x, h), s.translating && delete s.translating[a];
+  const F = new MutationObserver(dt);
+  F.observedElement = a, F.observe(a, {
+    childList: !0,
+    subtree: !0
+  }), ut(F, a);
+}
+const pt = {
+  mounted(a, f) {
+    const s = f.modifiers.children, h = f.modifiers.global;
+    W(a, s), h && window.addEventListener("language-changed", () => {
+      W(a, s);
     });
   },
-  unmounted(s) {
-    s._translateCleanup && s._translateCleanup();
+  unmounted(a) {
+    ct(a);
   }
 };
 export {
-  ht as RTTranslate
+  pt as RTTranslate
 };
