@@ -1,4 +1,4 @@
-import updateElement from '../core.js';
+import updateElement, {removeMutationObserver} from '../core.js';
 
 const translate = {
     mounted(el, binding) {
@@ -15,9 +15,7 @@ const translate = {
     },
 
     unmounted(el) {
-        if (el._translateCleanup) {
-            el._translateCleanup();
-        }
+        removeMutationObserver(el);
     }
 };
 

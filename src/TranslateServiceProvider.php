@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Ravenna\Translate\View\Components\RtScripts;
 
+use function Pest\Laravel\json;
+
 class TranslateServiceProvider extends ServiceProvider
 {
     const ROOT_DIR = __DIR__ . '/../';
@@ -29,7 +31,7 @@ class TranslateServiceProvider extends ServiceProvider
         require_once __DIR__ . '/functions.php';
 
         $this->rTPublishes();
-        $this->rtBladeComponents();
+        $this->rtBlade();
     }
 
     protected function rtPublishes()
@@ -47,9 +49,18 @@ class TranslateServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
     }
 
-    protected function rtBladeComponents()
+    protected function rtBlade()
     {
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'translate');
         Blade::componentNamespace('Ravenna\\Translate\\View\\Components', 'translate');
+        Blade::directive('rtScripts', function (string $defaultLanguage) {
+            // replace all single quotes with double quotes for json compatibility
+            $defaultLanguage = str_replace("'", '"', $defaultLanguage);
+            $defaultLanguage = json_decode($defaultLanguage, true);
+
+            // If json_decode fails, it will return null, which fails gracefully
+            $component = new RtScripts($defaultLanguage);
+            return $component->render();
+        });
     }
 }

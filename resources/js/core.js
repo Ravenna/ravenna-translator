@@ -171,36 +171,27 @@ async function fetchTranslations(texts, lang) {
     }
 };
 
-async function updateElement(el, isChildren = false) {
-    const lang = getLanguage();
-
-    if (window._ravennaTranslate?.defaultLanguages?.some(dl => {
-        return dl === lang || dl === lang.split('-')[0] || dl === lang.split('-')[0].toUpperCase();
-    })) {
-        return;
-    }
-
-    const texts = [];
-    walkElement(el, 0, texts);
-
-    const toTranslate = texts.filter(item => {
+function filterAndTranslateStoredTexts(texts, lang) {
+    return texts.filter(item => {
         const storedValue = getTranslationFromStorage(item.key, lang);
-
         if (storedValue) {
             console.log("Using stored translation for", item.text, ":", storedValue);
             applyTranslation(item.parent, item.index, storedValue);
             return false; // already translated
         }
-
         return true;
     });
+};
+
+async function handleTexts(texts, lang) {
+    const toTranslate = filterAndTranslateStoredTexts(texts, lang);
 
     if (toTranslate.length === 0) {
         return;
     }
 
     try {
-        fetchTranslations(toTranslate, lang);
+        await fetchTranslations(toTranslate, lang);
     } catch (error) {
         // remove any ongoing animations
         texts.forEach(item => {
@@ -210,4 +201,111 @@ async function updateElement(el, isChildren = false) {
     }
 }
 
+function storeMutationObserver(observer, el) {
+    const translationStore = window._ravennaTranslate;
+
+    if (!translationStore.mutationObservers) {
+        translationStore.mutationObservers = {};
+    }
+
+    translationStore.mutationObservers[el] = observer;
+}
+
+function removeMutationObserver(el) {
+    const translationStore = window._ravennaTranslate;
+
+    if (translationStore.mutationObservers && translationStore.mutationObservers[el]) {
+        translationStore.mutationObservers[el].disconnect();
+        delete translationStore.mutationObservers[el];
+    }
+}
+
+function fetchMutationTexts(mutationsList) {
+    const texts = [];
+
+    for (const mutation of mutationsList) {
+        if (mutation.type === 'childList') {
+            mutation.addedNodes.forEach(node => {
+                walkElement(node, 0, texts);
+            });
+        }
+    }
+    return texts;
+}
+
+function mutationCallback(mutationsList, observer) {
+    const translationStore = window._ravennaTranslate;
+
+    if (!observer.observedElement) {
+        console.warn("No observed element found, skipping mutation handling.");
+        return;
+    }
+
+    if (translationStore?.translating?.[observer.observedElement]) {
+        console.warn("Element is already being translated, skipping:", observer.observedElement);
+        return;
+    }
+
+    translationStore.translating && (translationStore.translating[observer.observedElement] = true);
+
+    console.log("Mutation observed:", mutationsList);
+    
+    const texts = fetchMutationTexts(mutationsList);
+
+    if (texts.length === 0) {
+        console.warn("No valid texts found in mutations.");
+        translationStore.translating && delete translationStore.translating[observer.observedElement];
+        return;
+    }
+
+    handleTexts(texts, getLanguage())
+        .catch(error => {
+            console.error('Error handling mutations:', error);
+        })
+        .finally(() => {
+            translationStore.translating && delete translationStore.translating[observer.observedElement];
+        }
+    );
+}
+
+async function updateElement(el, isChildren = false) {
+    const translationStore = window._ravennaTranslate;
+
+    const lang = getLanguage();
+
+    if (translationStore?.defaultLanguages?.some(dl => {
+        return dl === lang || dl === lang.split('-')[0] || dl === lang.split('-')[0].toUpperCase();
+    })) {
+        return;
+    }
+
+    const texts = [];
+    walkElement(el, 0, texts);
+
+    if (texts.length === 0) {
+        console.warn("No translatable texts found in element:", el);
+        return;
+    }
+
+    translationStore.translating && (translationStore.translating[el] = true);
+
+    await handleTexts(texts, lang);
+
+    translationStore.translating && delete translationStore.translating[el];
+
+    const observer = new MutationObserver(mutationCallback);
+    observer.observedElement = el;
+    observer.observe(el, {
+        childList: true,
+        subtree: true
+    });
+
+    storeMutationObserver(observer, el);
+}
+
 export default updateElement;
+
+export {
+    storeMutationObserver,
+    removeMutationObserver
+}
